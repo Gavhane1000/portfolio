@@ -1,0 +1,10 @@
+node_modules
+dist
+.env
+.env.local
+.vercel
+*.log
+
+# Local-only files
+.claude
+Shubham_Gavhane_Python.pdf

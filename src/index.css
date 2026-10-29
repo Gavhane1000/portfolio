@@ -1,0 +1,239 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+:root,
+[data-theme='dark'] {
+  --bg: #0a0b0a;
+  --elev: #111311;
+  --surface: #161916;
+  --line: rgb(237 239 234 / 0.09);
+  --line-strong: rgb(237 239 234 / 0.18);
+  --fg: #edefea;
+  --muted: #8b9086;
+  --accent: #c6ff3d;
+  --accent-ink: #c6ff3d;
+  --on-accent: #0a0b0a;
+  --glow: rgb(198 255 61 / 0.16);
+  --graph-node: 198 255 61;
+  --graph-glow: 198 255 61;
+  --graph-accent: 198 255 61;
+  --graph-fg: 237 239 234;
+  --shadow-card: 0 -20px 60px -30px rgb(0 0 0 / 0.5);
+  --accent-word: var(--accent);
+  --accent-word-bg: none;
+  color-scheme: dark;
+}
+
+[data-theme='light'] {
+  --bg: #e6e5dc;
+  --elev: #efeee6;
+  --surface: #dad9cf;
+  --line: rgb(14 16 13 / 0.11);
+  --line-strong: rgb(14 16 13 / 0.22);
+  --fg: #0c0e0b;
+  --muted: #52564c;
+  --accent: #c6ff3d;
+  --accent-ink: #3a6a00;
+  --on-accent: #0a0b0a;
+  --glow: rgb(170 235 20 / 0.28);
+  --graph-node: 22 30 12;
+  --graph-glow: 160 225 20;
+  --graph-accent: 63 115 0;
+  --graph-fg: 12 14 11;
+  --shadow-card: 0 30px 60px -40px rgb(14 16 13 / 0.25), 0 1px 0 rgb(14 16 13 / 0.04);
+  --accent-word: var(--fg);
+  --accent-word-bg: linear-gradient(transparent 60%, var(--accent) 60%, var(--accent) 92%, transparent 92%);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-elev: var(--elev);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-on-accent: var(--on-accent);
+  --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+}
+
+html {
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Opening the AI chat compresses the page instead of covering it */
+:root {
+  --chat-offset: 0px;
+  --chat-offset-bottom: 0px;
+}
+html.chat-open {
+  --chat-offset-bottom: 62svh;
+}
+@media (min-width: 768px) {
+  html.chat-open {
+    --chat-offset: 452px;
+    --chat-offset-bottom: 0px;
+  }
+}
+
+body {
+  padding-right: var(--chat-offset);
+  padding-bottom: var(--chat-offset-bottom);
+  transition: padding-right 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Film grain gives the flat dark a tactile, premium feel */
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+[data-theme='light'] .grain {
+  opacity: 0.025;
+}
+
+/* Serif accent words: lime text on dark, ink with a lime highlighter stroke on light.
+   Driven by vars so a nested dark band resets them. */
+.accent-word {
+  color: var(--accent-word);
+  background: var(--accent-word-bg);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Dark feature bands keep their glow inside the light theme */
+.band {
+  background: var(--bg);
+  color: var(--fg);
+}
+[data-theme='light'] .band {
+  margin-inline: 8px;
+  border-radius: 28px;
+}
+@media (min-width: 768px) {
+  [data-theme='light'] .band {
+    margin-inline: 16px;
+    border-radius: 40px;
+  }
+}
+
+.text-outline {
+  -webkit-text-stroke: 1px var(--line-strong);
+  color: transparent;
+}
+
+.mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+
+.dot-grid {
+  background-image: radial-gradient(var(--line-strong) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+.animate-blink {
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+.animate-pulse-ring {
+  animation: pulse-ring 1.8s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+}
+
+/* Footer name: fills left → right, holds, then clears to the right, on loop */
+@keyframes fill-sweep {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  45%,
+  60% {
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 100%);
+  }
+}
+.animate-fill-sweep {
+  clip-path: inset(0 100% 0 0);
+  animation: fill-sweep 8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fill-sweep {
+    animation: none;
+    clip-path: none;
+  }
+  .animate-marquee,
+  .animate-pulse-ring {
+    animation: none;
+  }
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--accent-ink);
+    outline-offset: 3px;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
